@@ -1,0 +1,19 @@
+version: '3.8'
+
+volumes:
+   starknet_accounts:
+
+services:
+  app:
+    # See https://aka.ms/vscode-remote/containers/non-root for details.
+    user: cairo
+
+    build: 
+      context: ..
+      dockerfile: .devcontainer/Dockerfile
+    volumes:
+      - ..:/workspace:cached
+      - $HOME/.ssh/:/home/cairo/.ssh # Mounts the ssh folder to authenticate with github
+      - starknet_accounts:/home/cairo/.starknet_accounts #Persists the data created for Starknet accounts in a Docker Volume
+    # Overrides default command so things don't shut down after the process ends.
+    command: sleep infinity

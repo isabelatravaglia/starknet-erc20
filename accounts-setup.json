@@ -1,0 +1,24 @@
+{
+    "alpha-goerli": {
+        "__default_old__": {
+            "private_key": "0x46985eec9cfbfadb40006cc03ffaa151da97fc50c96427956665058d28012fd0",
+            "public_key": "0x114d4001026b163b4861d5e8fa6b3394b1187eea3183eba049339c37280185d6",
+            "salt": "0x1b81d174282802d1ab9e4468554a33d2975eed2ad118c1aff42d134add0ee0ad",
+            "address": "0x7658839d8574afeba96b6b9cf75ac3386d957c7ce70e41f49f6a7ff8420f338b",
+            "deployed": false
+        },
+        "__argentx__": {
+            "private_key": "0x03a0781d0e91c85f0099b84850c22baac6207d0e60b18d2152aeb349831e31ea",
+            "public_key": "",
+            "address": "0x06241600436f1D700Ec6cE51E0E12Ff16688f4A59706F217F25B5a476b7f6A01",
+            "deployed": true
+        },
+        "__default__": {
+            "private_key": "0x1b3abd3bf981c6195b3cfdd14007ba16316c6e3f752daf896783cd705d9976e",
+            "public_key": "0x7d401ae69518803b5bbca224d2f49e7c3a57681bd95d1a6cd7b6eba0fa57686",
+            "salt": "0x5b568695412f013a7fd50d8af706af2850188df0afbbd24d447bf0b1f19f59b",
+            "address": "0x5716b73b204b23c12ac3fca6bba4053d1ededb186f7a0f8f44df56c0b3e476d",
+            "deployed": true
+        }
+    }
+}

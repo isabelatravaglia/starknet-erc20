@@ -1,0 +1,30 @@
+{
+    "name": "cairo-dev",
+    "dockerComposeFile": "docker-compose.yml",
+    "service": "app",
+    "workspaceFolder": "/workspace",
+    
+    "customizations": {
+      "vscode": {
+        "extensions": [
+          "ms-python.python",
+          "Starkware.cairo",
+          "ms-vscode.sublime-keybindings",
+          "dbaeumer.vscode-eslint",
+          "wesbos.theme-cobalt2",
+          "CoenraadS.bracket-pair-colorizer"
+        ],
+        "settings": {
+          "terminal.integrated.defaultProfile.linux": "zsh",
+          "workbench.colorTheme": "Cobalt2",
+          "dotfiles.repository": "isabelatravaglia/dotfiles",
+          "dotfiles.targetPath": "~/dotfiles",
+          "dotfiles.installCommand": "~/dotfiles/install.sh",
+          "editor.wordWrap": "on"
+        }
+      }
+    },
+    "remoteUser": "cairo",
+    "postStartCommand": "zsh && source ~/cairo_venv/bin/activate"
+    // "postStartCommand": "source ~/cairo_venv/bin/activate"
+  }
