@@ -61,6 +61,11 @@ func tokens_in_custody{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_che
     return (amount,);
 }
 
+@view
+func deposit_tracker_token{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() -> (deposit_tracker_token_address: felt) {
+    let (deposit_tracker_token_address : felt) = wrap_token_address_storage.read();
+    return (deposit_tracker_token_address,);
+}
 //
 // Externals
 //
@@ -143,27 +148,36 @@ func deposit_tokens{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_
     let (this_contract) = get_contract_address();
     let (caller) = get_caller_address();
     let (dummy_token_address) = dummy_token_address_storage.read();
-    let (wrap_token_address) = wrap_token_address_storage.read();
+    let (wrap_token_address) = deposit_tracker_token();
 
     let (success : felt) = IDTKERC20.transferFrom(dummy_token_address, caller, this_contract, amount);
     with_attr error_message("Deposit failed."){
         assert success = 1;
     }
 
-    let (success_wrap : Uint256) = IAFTERC20.mint_tokens(wrap_token_address, amount); //In this case, the caller is this_contract, hence the minting will be deposited to its contract, and not to the caller. So we need to make an approve call followed by a transferFrom, so that the caller can receive the wrap token from this_contract.
+    let (success_wrap : felt) = IAFTERC20.mint_tokens(wrap_token_address, amount); //In this case, the "caller" who will receive the wrap tokens is this_contract, and not to the caller. So we need to make an approve call followed by a transferFrom, so that the caller can receive the wrap token from this_contract.
     with_attr error_message("Wrap token minting failed."){
-        UTILS_assert_uint256_strictly_positive(success_wrap);
+        assert success_wrap = 1;
     }
+    let (success_approve : felt) = IAFTERC20.approve(wrap_token_address, this_contract, amount);
+    with_attr error_message("Approval failed"){
+        assert success_approve = 1;
+    }
+    let (success_transfer : felt) = IAFTERC20.transferFrom(wrap_token_address, this_contract, caller, amount);
+    with_attr error_message("Wrap token transfer failed"){
+        assert success_transfer = 1;
+    }
+
     // Update the _tokens_in_custody storage var to put the tokens transferred under the caller's custody.
     // Get caller's current balance, add the deposit amount and update the _tokens_in_custody storage var
     let (caller_balance : Uint256) = _tokens_in_custody.read(caller);
     let (caller_updated_balance : Uint256, _) = uint256_add(caller_balance, amount);
     _tokens_in_custody.write(caller, caller_updated_balance);
 
-    // return (total_amount = caller_updated_balance);
-    let zero_as_uint256: Uint256 = Uint256(0, 0);
+    return (total_amount = caller_updated_balance);
+    // let zero_as_uint256: Uint256 = Uint256(0, 0);
     // Returning the wrong total_amount to prove that Evaluator is not evaluating the function return.
-    return (total_amount = zero_as_uint256);
+    // return (total_amount = zero_as_uint256);
 
     
 

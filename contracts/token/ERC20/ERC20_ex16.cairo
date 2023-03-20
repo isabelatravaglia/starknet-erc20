@@ -127,23 +127,35 @@ func decreaseAllowance{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_che
     return ERC20.decrease_allowance(spender, subtracted_value);
 }
 
+// @external
+// func mint_tokens{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(amount : Uint256) -> (amount: Uint256) {
+//     alloc_locals;
+//     assert_only_minters();
+
+//     let (recipient) = get_caller_address();
+//     let (token_address : felt) = get_contract_address();
+
+
+//     let (success: felt) = IERC20.transfer(contract_address=token_address, recipient=recipient, amount=amount);
+//     with_attr error_message("Minting Failed"){
+//         assert success = 1;
+//     }
+
+//     return (amount,);
+// }
+
 @external
-func mint_tokens{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(amount : Uint256) -> (amount: Uint256) {
+func mint_tokens{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(amount : Uint256) -> (success : felt) {
     alloc_locals;
     assert_only_minters();
 
     let (recipient) = get_caller_address();
     let (token_address : felt) = get_contract_address();
 
+    ERC20._mint(recipient=recipient, amount=amount);
 
-    let (success: felt) = IERC20.transfer(contract_address=token_address, recipient=recipient, amount=amount);
-    with_attr error_message("Minting Failed"){
-        assert success = 1;
-    }
-
-    return (amount,);
+    return (success=1);
 }
-
 
 @external
 func add_minter{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(account : felt) -> (success: felt) {
