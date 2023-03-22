@@ -2,8 +2,18 @@
 
 from starkware.cairo.common.uint256 import Uint256
 
+// Dummy token is an ERC20 with a faucet
 @contract_interface
-namespace IERC20 {
+namespace IESTERC20 {
+    func mint_tokens(amount: Uint256) -> (success: felt) {
+    }
+
+    func burn(amount: Uint256) -> (success: felt) {
+    }
+
+    func burnFrom(account: felt, amount: Uint256) -> (success: felt) {
+    }
+
     func name() -> (name: felt) {
     }
 
@@ -31,4 +41,9 @@ namespace IERC20 {
     func approve(spender: felt, amount: Uint256) -> (success: felt) {
     }
 
+    func add_minter(account: felt) -> (success : felt) {
+    }
+
+    func is_minter(account: felt) -> (true : felt) {
+    }
 }
